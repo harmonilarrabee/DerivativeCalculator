@@ -1,5 +1,12 @@
 terms = []
 
+class Term:
+  def __init__(self, coefficient, exponent):
+    self.coefficient = coefficient
+    self.exponent = exponent
+
+terms = []
+
 def main():
 	printHeader()
 	while True:
@@ -58,7 +65,7 @@ def printChainRuleDerivative():
 
 def getFunction():
 	print ("")
-	numberOfTerms = int(input("PLease enter the number of terms in the function: "))
+	numberOfTerms = int(input("Enter the number of terms in the function: "))
 	while not numberOfTerms in range (1,6):
 		print ("")
 		print ("I'm sorry, that's not a valid number of terms. ")
@@ -68,7 +75,10 @@ def getFunction():
 		getTerm()
 
 def getTerm():
-	pass
+	print ("For this term, ")
+	coefficient = int(input("enter the coefficient: "))
+	exponent = int(input("enter the exponent: "))
+	terms.append(Term(coefficient, exponent))
 
 def sayGoodbye():
 	print ("")

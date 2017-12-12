@@ -14,13 +14,13 @@ def main():
 		while not derivativeType in range (0,5):
 			derivativeType = int(errorMessage())
 		if derivativeType == 0:
-			printPowerRuleDerivative()
+			printPowerRuleDerivative(terms)
 		elif derivativeType == 1:
-			printProductRuleDerivative()
+			printProductRuleDerivative(terms)
 		elif derivativeType ==  2:
-			printQuotientRuleDerivative()
+			printQuotientRuleDerivative(terms)
 		elif derivativeType == 3:
-			printChainRuleDerivative()
+			printChainRuleDerivative(terms)
 		elif derivativeType == 4:
 			sayGoodbye()
 			break
@@ -47,21 +47,32 @@ def errorMessage():
 	print ("")
 	return input("I'm sorry, that's not one of the options. Please type either 0, 1, 2, or 3: ")
 
-def printPowerRuleDerivative():
+def printPowerRuleDerivative(terms):
 	getFunction()
 	print ("")
+	print ("f(x) = ")
+	for term in terms:
+		print (str(term.coefficient) + "x^" + str(term.exponent))
+	print ("")
+	print ("f'(X) = ")
+	for term in terms:
+		print (str(term.coefficient*term.exponent) + "x^" + str(term.exponent-1))
+	clearTerms()
 
-def printProductRuleDerivative():
+def printProductRuleDerivative(terms):
 	getFunction()
 	print ("")
+	clearTerms()
 
-def printQuotientRuleDerivative():
+def printQuotientRuleDerivative(terms):
 	getFunction()
 	print ("")
+	clearTerms()
 
-def printChainRuleDerivative():
+def printChainRuleDerivative(terms):
 	getFunction()
 	print ("")
+	clearTerms()
 
 def getFunction():
 	print ("")
@@ -79,6 +90,9 @@ def getTerm():
 	coefficient = int(input("enter the coefficient: "))
 	exponent = int(input("enter the exponent: "))
 	terms.append(Term(coefficient, exponent))
+
+def clearTerms():
+	del terms[:]
 
 def sayGoodbye():
 	print ("")

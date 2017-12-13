@@ -7,6 +7,18 @@ class Term:
 
 terms = []
 
+derivedTerms = []
+
+inputQuestions = [
+"What type of function do you want to derive? ", 
+"To derive a function with the power rule, press 0. ", 
+"To derive a function with the product rule, press 1. ", 
+"To derive a function with the quotient rule, press 2. ", 
+"To derive a function with the chain rule, press 3. ", 
+"If you don't want to derive a function, press 4. ", 
+
+]
+
 def main():
 	printHeader()
 	while True:
@@ -14,13 +26,13 @@ def main():
 		while not derivativeType in range (0,5):
 			derivativeType = int(errorMessage())
 		if derivativeType == 0:
-			printPowerRuleDerivative(terms)
+			printPowerRuleDerivative(terms, derivedTerms)
 		elif derivativeType == 1:
-			printProductRuleDerivative(terms)
+			printProductRuleDerivative(terms, derivedTerms)
 		elif derivativeType ==  2:
-			printQuotientRuleDerivative(terms)
+			printQuotientRuleDerivative(terms, derivedTerms)
 		elif derivativeType == 3:
-			printChainRuleDerivative(terms)
+			printChainRuleDerivative(terms, derivedTerms)
 		elif derivativeType == 4:
 			sayGoodbye()
 			break
@@ -35,44 +47,35 @@ def printHeader():
 	print ("")
 
 def printInputQuestions():
-	print("What type of function do you want to derive? ")
-	print ("To derive a function with the power rule, press 0. ")
-	print ("To derive a function with the product rule, press 1. ")
-	print ("To derive a function with the quotient rule, press 2. ")
-	print ("To derive a function with the chain rule, press 3. ")
-	print ("If you don't want to derive a function, press 4. ")
+	print (inputQuestions[0])
+	print (inputQuestions[1])
+	print (inputQuestions[2])
+	print (inputQuestions[3])
+	print (inputQuestions[4])
+	print (inputQuestions[5])
 	print ("")
 
 def errorMessage():
 	print ("")
 	return input("I'm sorry, that's not one of the options. Please type either 0, 1, 2, or 3: ")
 
-def printPowerRuleDerivative(terms):
+def printPowerRuleDerivative(terms, derivedTerms):
 	getFunction()
-	print ("")
-	print ("f(x) = ")
 	for term in terms:
-		print (str(term.coefficient) + "x^" + str(term.exponent))
-	print ("")
-	print ("f'(X) = ")
-	for term in terms:
-		print (str(term.coefficient*term.exponent) + "x^" + str(term.exponent-1))
-	clearTerms()
+		derivedTerms.append(str(term.coefficient*term.exponent) + "x^" + str(term.exponent-1))
+	printFunctions(terms, derivedTerms)
 
-def printProductRuleDerivative(terms):
+def printProductRuleDerivative(terms, derivedTerms):
 	getFunction()
-	print ("")
-	clearTerms()
+	printFunctions(terms, derivedTerms)
 
-def printQuotientRuleDerivative(terms):
+def printQuotientRuleDerivative(terms, derivedTerms):
 	getFunction()
-	print ("")
-	clearTerms()
+	printFunctions(terms, derivedTerms)
 
-def printChainRuleDerivative(terms):
+def printChainRuleDerivative(terms, derivedTerms):
 	getFunction()
-	print ("")
-	clearTerms()
+	printFunctions(terms, derivedTerms)
 
 def getFunction():
 	print ("")
@@ -83,16 +86,32 @@ def getFunction():
 		numberOfTerms = int(input("Please enter an integer between 1 and 5: "))
 		print ("")
 	for i in range (0, numberOfTerms):
-		getTerm()
+		getTerm(i)
 
-def getTerm():
-	print ("For this term, ")
+def getTerm(i):
+	print ("For term " + str(i+1) + ", ")
 	coefficient = int(input("enter the coefficient: "))
 	exponent = int(input("enter the exponent: "))
 	terms.append(Term(coefficient, exponent))
 
+def printFunctions(terms, derivedTerms):
+	print ("")
+	print ("f(x) = ")
+	for term in terms:
+		print (str(term.coefficient) + "x^" + str(term.exponent))
+	print ("")
+	print ("f'(x) = ")
+	for derivedTerm in derivedTerms:
+		print (derivedTerm)
+	print ("")
+	clearTerms()
+	clearDerivedTerms()
+
 def clearTerms():
 	del terms[:]
+
+def clearDerivedTerms():
+	del derivedTerms[:]
 
 def sayGoodbye():
 	print ("")

@@ -1,13 +1,18 @@
 terms = []
 
 class Term:
-  def __init__(self, coefficient, exponent):
-    self.coefficient = coefficient
-    self.exponent = exponent
-
-terms = []
+	def __init__(self, coefficient, variable, exponent):
+		self.coefficient = coefficient
+		self.variable = variable
+		self.exponent = exponent
 
 derivedTerms = []
+
+class DerivedTerm:
+	def __init__(self, coefficient, variable, exponent):
+		self.coefficient = coefficient
+		self.variable = variable
+		self.exponent = exponent
 
 inputQuestions = [
 "What type of function do you want to derive? ", 
@@ -62,20 +67,29 @@ def errorMessage():
 def printPowerRuleDerivative(terms, derivedTerms):
 	getFunction()
 	for term in terms:
-		derivedTerms.append(str(term.coefficient*term.exponent) + "x^" + str(term.exponent-1))
+		derivedTerms.append(DerivedTerm(term.coefficient*term.exponent, "x^", term.exponent-1))
 	printFunctions(terms, derivedTerms)
 
 def printProductRuleDerivative(terms, derivedTerms):
-	getFunction()
-	printFunctions(terms, derivedTerms)
+	#getFunction()
+	#printFunctions(terms, derivedTerms)
+	print ("")
+	print ("I'm sorry, this type of function cannot currently be derived. ")
+	print ("")
 
 def printQuotientRuleDerivative(terms, derivedTerms):
-	getFunction()
-	printFunctions(terms, derivedTerms)
+	#getFunction()
+	#printFunctions(terms, derivedTerms)
+	print ("")
+	print ("I'm sorry, this type of function cannot currently be derived. ")
+	print ("")
 
 def printChainRuleDerivative(terms, derivedTerms):
-	getFunction()
-	printFunctions(terms, derivedTerms)
+	#getFunction()
+	#printFunctions(terms, derivedTerms)
+	print ("")
+	print ("I'm sorry, this type of function cannot currently be derived. ")
+	print ("")
 
 def getFunction():
 	print ("")
@@ -92,17 +106,20 @@ def getTerm(i):
 	print ("For term " + str(i+1) + ", ")
 	coefficient = int(input("enter the coefficient: "))
 	exponent = int(input("enter the exponent: "))
-	terms.append(Term(coefficient, exponent))
+	variable = "x^"
+	terms.append(Term(coefficient, variable, exponent))
 
 def printFunctions(terms, derivedTerms):
-	print ("")
-	print ("f(x) = ")
+	function = "f(x) = "
 	for term in terms:
-		print (str(term.coefficient) + "x^" + str(term.exponent))
-	print ("")
-	print ("f'(x) = ")
+		function = function + str(term.coefficient) + term.variable + str(term.exponent) + " + "
+	derivedFunction = "f'(x) = "
 	for derivedTerm in derivedTerms:
-		print (derivedTerm)
+		derivedFunction = derivedFunction + str(derivedTerm.coefficient) + derivedTerm.variable + str(derivedTerm.exponent) + " + "
+	print ("")
+	print (function[:-3])
+	print ("")
+	print (derivedFunction[:-3])
 	print ("")
 	clearTerms()
 	clearDerivedTerms()
@@ -117,6 +134,5 @@ def sayGoodbye():
 	print ("")
 	print ("Okay, Goodbye! ")
 	print ("")
-
 
 main()

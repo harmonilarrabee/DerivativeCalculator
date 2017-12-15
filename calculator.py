@@ -6,9 +6,17 @@ class Term:
 		self.variable = variable
 		self.exponent = exponent
 
-derivedTerms = []
+termInGxs = []
 
-class DerivedTerm:
+class TermInGx:
+	def __init__(self, coefficient, variable, exponent):
+		self.coefficient = coefficient
+		self.variable = variable
+		self.exponent = exponent
+
+termInHxs = []
+
+class TermInHx:
 	def __init__(self, coefficient, variable, exponent):
 		self.coefficient = coefficient
 		self.variable = variable
@@ -21,7 +29,6 @@ inputQuestions = [
 "To derive a function with the quotient rule, press 2. ", 
 "To derive a function with the chain rule, press 3. ", 
 "If you don't want to derive a function, press 4. ", 
-
 ]
 
 def main():
@@ -31,25 +38,25 @@ def main():
 		while not derivativeType in range (0,5):
 			derivativeType = int(errorMessage())
 		if derivativeType == 0:
-			printPowerRuleDerivative(terms, derivedTerms)
+			printPowerRuleDerivative(terms)
 		elif derivativeType == 1:
-			printProductRuleDerivative(terms, derivedTerms)
+			printProductRuleDerivative(termInGxs, termInHxs)
 		elif derivativeType ==  2:
-			printQuotientRuleDerivative(terms, derivedTerms)
+			printQuotientRuleDerivative(termInGxs, termInHxs)
 		elif derivativeType == 3:
-			printChainRuleDerivative(terms, derivedTerms)
+			printChainRuleDerivative(terms)
 		elif derivativeType == 4:
 			sayGoodbye()
 			break
-
-def getDerivativeType():
-	printInputQuestions()
-	return input("Type selection and press enter: ")
 
 def printHeader():
 	print ("")
 	print ("Hello! Welcome to the Derivative Calculator! ")
 	print ("")
+
+def getDerivativeType():
+	printInputQuestions()
+	return input("Type selection and press enter: ")
 
 def printInputQuestions():
 	print (inputQuestions[0])
@@ -64,32 +71,11 @@ def errorMessage():
 	print ("")
 	return input("I'm sorry, that's not one of the options. Please type either 0, 1, 2, or 3: ")
 
-def printPowerRuleDerivative(terms, derivedTerms):
+def printPowerRuleDerivative(terms):
 	getFunction()
-	for term in terms:
-		derivedTerms.append(DerivedTerm(term.coefficient*term.exponent, "x^", term.exponent-1))
-	printFunctions(terms, derivedTerms)
-
-def printProductRuleDerivative(terms, derivedTerms):
-	#getFunction()
-	#printFunctions(terms, derivedTerms)
-	print ("")
-	print ("I'm sorry, this type of function cannot currently be derived. ")
-	print ("")
-
-def printQuotientRuleDerivative(terms, derivedTerms):
-	#getFunction()
-	#printFunctions(terms, derivedTerms)
-	print ("")
-	print ("I'm sorry, this type of function cannot currently be derived. ")
-	print ("")
-
-def printChainRuleDerivative(terms, derivedTerms):
-	#getFunction()
-	#printFunctions(terms, derivedTerms)
-	print ("")
-	print ("I'm sorry, this type of function cannot currently be derived. ")
-	print ("")
+	function = functionPowerRule(terms)
+	derivedFunction = derivativePowerRule(terms)
+	printFunctions(derivedFunction, function)
 
 def getFunction():
 	print ("")
@@ -109,26 +95,167 @@ def getTerm(i):
 	variable = "x^"
 	terms.append(Term(coefficient, variable, exponent))
 
-def printFunctions(terms, derivedTerms):
+def functionPowerRule(terms):
 	function = "f(x) = "
 	for term in terms:
 		function = function + str(term.coefficient) + term.variable + str(term.exponent) + " + "
+	function = function[:-3]
+	return function
+
+def derivativePowerRule(terms):
 	derivedFunction = "f'(x) = "
-	for derivedTerm in derivedTerms:
-		derivedFunction = derivedFunction + str(derivedTerm.coefficient) + derivedTerm.variable + str(derivedTerm.exponent) + " + "
+	for term in terms:
+		derivedFunction = derivedFunction + str(term.coefficient*term.exponent) + "x^" + str(term.exponent-1) + " + "
+	derivedFunction = derivedFunction[:-3]
+	return derivedFunction
+
+def printProductRuleDerivative(termInGxs, terminHxs):
 	print ("")
-	print (function[:-3])
+	print ("Please enter one multiple function as g(x) and one as h(x). ")
+	getGx()
+	getHx()
+	function = functionProductRule(termInGxs, terminHxs)
+	derivedFunction = derivativeProductRule(termInGxs, terminHxs)
+	printFunctions(derivedFunction, function)
+
+def printQuotientRuleDerivative(termInGxs, termInHxs):
 	print ("")
-	print (derivedFunction[:-3])
+	print ("Please enter one multiple function as g(x) and one as h(x). ")
+	getGx()
+	getHx()
+	function = functionQuotientRule(termInGxs, termInHxs)
+	derivedFunction = derivativeQuotientRule(termInGxs, termInHxs)
+	printFunctions(derivedFunction, function)
+
+def getGx():
+	print ("")
+	numberOfTerms = int(input("Enter the number of terms in the function g(x): "))
+	while not numberOfTerms in range (1,6):
+		print ("")
+		print ("I'm sorry, that's not a valid number of terms. ")
+		numberOfTerms = int(input("Please enter an integer between 1 and 5: "))
+		print ("")
+	for i in range (0, numberOfTerms):
+		getGxTerm(i)
+
+def getHx():
+	print ("")
+	numberOfTerms = int(input("Enter the number of terms in the function h(x): "))
+	while not numberOfTerms in range (1,6):
+		print ("")
+		print ("I'm sorry, that's not a valid number of terms. ")
+		numberOfTerms = int(input("Please enter an integer between 1 and 5: "))
+		print ("")
+	for i in range (0, numberOfTerms):
+		getHxTerm(i)
+
+def getGxTerm(i):
+	print ("For term " + str(i+1) + " in g(x), ")
+	coefficient = int(input("enter the coefficient: "))
+	exponent = int(input("enter the exponent: "))
+	variable = "x^"
+	termInGxs.append(TermInGx(coefficient, variable, exponent))
+
+def getHxTerm(i):
+	print ("For term " + str(i+1) + " in h(x), ")
+	coefficient = int(input("enter the coefficient: "))
+	exponent = int(input("enter the exponent: "))
+	variable = "x^"
+	termInHxs.append(TermInHx(coefficient, variable, exponent))
+
+def functionProductRule(termInGxs, terminHxs):
+	function = "f(x) = ("
+	for termInGx in termInGxs:
+		function = function + str(termInGx.coefficient) + termInGx.variable + str(termInGx.exponent) + " + "
+	function = function[:-3] + ")("
+	for termInHx in termInHxs:
+		function = function + str(termInHx.coefficient) + termInHx.variable + str(termInHx.exponent) + " + "
+	function = function[:-3] + ")"
+	return function
+
+def derivativeProductRule(termInGxs, terminHxs):
+	gxDerivation = ""
+	for termInGx in termInGxs:
+		gxDerivation = gxDerivation + str(termInGx.coefficient*termInGx.exponent) +  "x^" + str(termInGx.exponent-1) + " + "
+	gxDerivation = gxDerivation[:-3]
+	hxDerivation = ""
+	for termInHx in termInHxs:
+		hxDerivation = hxDerivation + str(termInHx.coefficient*termInHx.exponent) +  "x^" + str(termInHx.exponent-1) + " + "
+	hxDerivation = hxDerivation[:-3]
+	derivedFunction = "f'(x) = ("
+	for termInGx in termInGxs:
+		derivedFunction = derivedFunction + str(termInGx.coefficient) + termInGx.variable + str(termInGx.exponent) + " + "
+	derivedFunction = derivedFunction[:-3] + ")(" + hxDerivation + ") + ("
+	for termInHx in termInHxs:
+		derivedFunction = derivedFunction + str(termInHx.coefficient) + termInHx.variable + str(termInHx.exponent) + " + "
+	derivedFunction = derivedFunction[:-3] + ")(" + gxDerivation + ")"
+	return derivedFunction
+
+def functionQuotientRule(termInGxs, terminHxs):
+	function = "f(x) = ("
+	for termInGx in termInGxs:
+		function = function + str(termInGx.coefficient) + termInGx.variable + str(termInGx.exponent) + " + "
+	function = function[:-3] + ")/("
+	for termInHx in termInHxs:
+		function = function + str(termInHx.coefficient) + termInHx.variable + str(termInHx.exponent) + " + "
+	function = function[:-3] + ")"
+	return function
+
+def derivativeQuotientRule(termInGxs, terminHxs):
+	gxDerivation = ""
+	for termInGx in termInGxs:
+		gxDerivation = gxDerivation + str(termInGx.coefficient*termInGx.exponent) +  "x^" + str(termInGx.exponent-1) + " + "
+	gxDerivation = gxDerivation[:-3]
+	hxDerivation = ""
+	for termInHx in termInHxs:
+		hxDerivation = hxDerivation + str(termInHx.coefficient*termInHx.exponent) +  "x^" + str(termInHx.exponent-1) + " + "
+	hxDerivation = hxDerivation[:-3]
+	derivedFunction = "f'(x) = (("
+	for termInHx in termInHxs:
+		derivedFunction = derivedFunction + str(termInHx.coefficient) + termInHx.variable + str(termInHx.exponent) + " + "
+	derivedFunction = derivedFunction[:-3] + ")(" + gxDerivation + ") - ("
+	for termInGx in termInGxs:
+		derivedFunction = derivedFunction + str(termInGx.coefficient) + termInGx.variable + str(termInGx.exponent) + " + "
+	derivedFunction = (derivedFunction[:-3] + ")(" + hxDerivation + "))")
+	derivedFunction = derivedFunction + "/(("
+	for termInHx in termInHxs:
+		derivedFunction = derivedFunction + str(termInHx.coefficient) + termInHx.variable + str(termInHx.exponent) + " + "
+	derivedFunction = derivedFunction[:-3] + ")^2)"
+	return derivedFunction
+
+def printChainRuleDerivative(terms):
+	#getFunction()
+	#printFunctions(terms, derivedTerms)
+	print ("")
+	print ("I'm sorry, this type of function cannot currently be derived. ")
+	print ("")
+
+def printFunctions(derivedFunction, function):
+	print ("")
+	print (function)
+	print ("")
+	print (derivedFunction)
 	print ("")
 	clearTerms()
-	clearDerivedTerms()
+	clearTermsInGx()
+	clearTermsInHx()
+	clearFunction(function)
+	clearDerivedFunction(derivedFunction)
 
 def clearTerms():
 	del terms[:]
 
-def clearDerivedTerms():
-	del derivedTerms[:]
+def clearTermsInGx():
+	del termsInGx[:]
+
+def clearTermsInHx():
+	del termsInHx[:]
+
+def clearFunction(function):
+	function = ""
+
+def clearDerivedFunction(derivedFunction):
+	derivedFunction = ""
 
 def sayGoodbye():
 	print ("")

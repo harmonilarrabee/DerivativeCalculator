@@ -228,16 +228,21 @@ def functionChainRule(termInGxs, termInHxs):
 	return function
 
 def derivativeChainRule(termInGxs, termInHxs):
-	derivative = "f'(x) = "
+	gxDerivation = ""
+	for termInGx in termInGxs:
+		gxDerivation = gxDerivation + str(termInGx.coefficient*termInGx.exponent) +  "x^" + str(termInGx.exponent-1) + " + "
+	gxDerivation = gxDerivation[:-3]
+	gx = ""
+	for termInGx in termInGxs:
+		gx = gx + str(termInGx.coefficient) + termInGx.variable + str(termInGx.exponent) + " + "
+	gx = gx[:-3]
+	derivative = "f'(x) = (" 
 	for termInHx in termInHxs:
 		derivative = derivative + str(termInHx.coefficient*termInHx.exponent)
-	derivative = derivative + "("
-	for termInGx in termInGxs:
-		derivative = derivative + str(termInHx.coefficient*termInHx.exponent) +  "x^" + str(termInHx.exponent-1) + " + "
-	derivative = derivative[:-3]
-	derivative = derivative + ")^"
+	derivative = derivative + "(" + str(gx) + ")^"
 	for termInHx in termInHxs:
 		derivative = derivative + str(termInHx.exponent-1)
+	derivative = derivative + ")(" + str(gxDerivation) + ")"
 	return derivative
 
 def printFunctions(derivedFunction, function):

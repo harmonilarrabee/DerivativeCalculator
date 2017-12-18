@@ -23,6 +23,7 @@ inputQuestions = [
 "If you don't want to derive a function, press 4. ", 
 ]
 
+
 def main():
 	printHeader()
 	while True:
@@ -41,14 +42,12 @@ def main():
 			sayGoodbye()
 			break
 
+
+#User Messages
 def printHeader():
 	print ("")
 	print ("Hello! Welcome to the Derivative Calculator! ")
 	print ("")
-
-def getDerivativeType():
-	printInputQuestions()
-	return input("Type selection and press enter: ")
 
 def printInputQuestions():
 	print (inputQuestions[0])
@@ -63,54 +62,72 @@ def errorMessage():
 	print ("")
 	return input("I'm sorry, that's not one of the options. Please type either 0, 1, 2, or 3: ")
 
-def getGx():
+def sayGoodbye():
 	print ("")
-	numberOfTerms = int(input("Enter the number of terms in the function g(x): "))
+	print ("Okay, Goodbye! ")
+	print ("")
+
+
+#Function Retrieval
+def getDerivativeType():
+	printInputQuestions()
+	return input("Type selection and press enter: ")
+
+def getGx(gx):
+	print ("")
+	userPrompt = "Enter the number of terms in the function: "
+	if gx:
+		userPrompt = userPrompt[:-2]
+		userPrompt = userPrompt + " g(x): "
+	numberOfTerms = int(input(userPrompt))
 	while not numberOfTerms in range (1,6):
 		print ("")
 		print ("I'm sorry, that's not a valid number of terms. ")
 		numberOfTerms = int(input("Please enter an integer between 1 and 5: "))
 		print ("")
 	for i in range (0, numberOfTerms):
-		getGxTerm(i)
+		getGxTerm(i, gx)
 
-def getGxTerm(i):
-	print ("For term " + str(i+1) + " in g(x), ")
+def getGxTerm(i, gx):
+	instruction = "For term " + str(i+1) + ", "
+	if gx:
+		instruction = instruction[:-2]
+		instruction = instruction + " g(x), "
+	print (instruction)
 	coefficient = int(input("enter the coefficient: "))
 	exponent = int(input("enter the exponent: "))
 	variable = "x^"
 	termInGxs.append(TermInGx(coefficient, variable, exponent))
 
-def getHx():
+def getHx(hx):
 	print ("")
-	numberOfTerms = int(input("Enter the number of terms in the function h(x): "))
-	while not numberOfTerms in range (1,6):
-		print ("")
-		print ("I'm sorry, that's not a valid number of terms. ")
-		numberOfTerms = int(input("Please enter an integer between 1 and 5: "))
-		print ("")
+	if hx:
+		numberOfTerms = int(input("Enter the number of terms in the function h(x): "))
+		while not numberOfTerms in range (1,6):
+			print ("")
+			print ("I'm sorry, that's not a valid number of terms. ")
+			numberOfTerms = int(input("Please enter an integer between 1 and 5: "))
+	else:
+		print ("For this type of function, h(x) can only have one term." )
+		numberOfTerms = 1
 	for i in range (0, numberOfTerms):
-		getHxTerm(i)
+		getHxTerm(i,hx)
 
-def getHxTerm(i):
-	print ("For term " + str(i+1) + " in h(x), ")
-	coefficient = int(input("enter the coefficient: "))
-	exponent = int(input("enter the exponent: "))
-	variable = "x^"
-	termInHxs.append(TermInHx(coefficient, variable, exponent))
-
-def getHx2():
-	print ("")
-	print ("For this type of function, h(x) can only have one term." )
-	print ("For the term in h(x), ")
+def getHxTerm(i,hx):
+	if hx:
+		print ("For term " + str(i+1) + " in h(x), ")
+	else:
+		print ("For the term in h(x), ")
 	coefficient = int(input("enter the coefficient: "))
 	exponent = int(input("enter the exponent: "))
 	variable = "x^"
 	termInHxs.append(TermInHx(coefficient, variable, exponent))
 
 
+#Power Rule
 def printPowerRuleDerivative(termInGxs):
-	getGx()
+	gx = False
+	getGx(gx)
 	function = functionPowerRule(termInGxs)
 	derivedFunction = derivativePowerRule(termInGxs)
 	printFunctions(derivedFunction, function)
@@ -129,11 +146,15 @@ def derivativePowerRule(termInGxs):
 	derivedFunction = derivedFunction[:-3]
 	return derivedFunction
 
+
+#Product Rule
 def printProductRuleDerivative(termInGxs, terminHxs):
+	gx = True
+	hx = True
 	print ("")
 	print ("Please enter one multiple function as g(x) and one as h(x). ")
-	getGx()
-	getHx()
+	getGx(gx)
+	getHx(hx)
 	function = functionProductRule(termInGxs, terminHxs)
 	derivedFunction = derivativeProductRule(termInGxs, terminHxs)
 	printFunctions(derivedFunction, function)
@@ -166,11 +187,15 @@ def derivativeProductRule(termInGxs, terminHxs):
 	derivedFunction = derivedFunction[:-3] + ")(" + gxDerivation + ")"
 	return derivedFunction
 
+
+#Quotient Rule
 def printQuotientRuleDerivative(termInGxs, termInHxs):
+	gx = True
+	hx = True
 	print ("")
 	print ("Please enter the numerator function as g(x) and the denominator one as h(x). ")
-	getGx()
-	getHx()
+	getGx(gx)
+	getHx(hx)
 	function = functionQuotientRule(termInGxs, termInHxs)
 	derivedFunction = derivativeQuotientRule(termInGxs, termInHxs)
 	printFunctions(derivedFunction, function)
@@ -207,11 +232,15 @@ def derivativeQuotientRule(termInGxs, terminHxs):
 	derivedFunction = derivedFunction[:-3] + ")^2)"
 	return derivedFunction
 
+
+#Chain Rule
 def printChainRuleDerivative(termInGxs, termInHxs):
+	gx = True
+	hx = False
 	print ("")
 	print ("Please enter the inside function as g(x) and the outside one as h(x). ")
-	getGx()
-	getHx2()
+	getGx(gx)
+	getHx(hx)
 	function = functionChainRule(termInGxs, termInHxs)
 	derivedFunction = derivativeChainRule(termInGxs, termInHxs)
 	printFunctions(derivedFunction, function)
@@ -245,6 +274,8 @@ def derivativeChainRule(termInGxs, termInHxs):
 	derivative = derivative + ")(" + str(gxDerivation) + ")"
 	return derivative
 
+
+#Function Printing
 def printFunctions(derivedFunction, function):
 	print ("")
 	print (function)
@@ -256,9 +287,5 @@ def printFunctions(derivedFunction, function):
 	function = ""
 	derivedFunction = ""
 
-def sayGoodbye():
-	print ("")
-	print ("Okay, Goodbye! ")
-	print ("")
 
 main()
